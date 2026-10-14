@@ -1,7 +1,7 @@
 FROM php:8.1-fpm
 
 # Arguments defined with default values for non-compose environments (like Miget)
-ARG user=www-data
+ARG user=craterapp
 ARG uid=1000
 
 # Install system dependencies
