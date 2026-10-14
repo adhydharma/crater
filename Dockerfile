@@ -1,8 +1,8 @@
 FROM php:8.1-fpm
 
-# Arguments defined in docker-compose.yml
-ARG user
-ARG uid
+# Arguments defined with default values for non-compose environments (like Miget)
+ARG user=www-data
+ARG uid=1000
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
