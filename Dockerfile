@@ -35,7 +35,7 @@ WORKDIR /var/www
 COPY . /var/www
 
 # Install Composer dependencies
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --optimize-autoloader --no-scripts
 
 # Create system user and fix permissions
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
