@@ -38,11 +38,11 @@ COPY . /var/www
 # Clear any pre-existing cache files from local development
 RUN rm -rf bootstrap/cache/*.php
 
-# Install Composer dependencies
+# Install Composer dependencies without running scripts
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-# Dump autoload without running scripts that regenerate stale package maps
-RUN composer dump-autoload --optimize
+# Dump autoload explicitly without scripts to prevent package:discover from running
+RUN composer dump-autoload --no-scripts --optimize
 
 # Create system user and fix permissions
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
