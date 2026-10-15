@@ -41,6 +41,9 @@ RUN rm -rf bootstrap/cache/*.php
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
+# Dump autoload without running scripts that regenerate stale package maps
+RUN composer dump-autoload --optimize
+
 # Create system user and fix permissions
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
 RUN mkdir -p /home/$user/.composer && \
