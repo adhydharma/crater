@@ -3,7 +3,7 @@ FROM php:8.1-fpm
 ARG user=craterapp
 ARG uid=1000
 
-# Install system dependencies
+# Install system dependencies & PostgreSQL development libraries (libpq-dev)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libzip-dev \
     libmagickwand-dev \
+    libpq-dev \
     mariadb-client
 
 # Clear cache
@@ -22,8 +23,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN pecl install imagick \
     && docker-php-ext-enable imagick
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
+# Install PHP extensions (Added pgsql and pdo_pgsql)
+RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql mbstring zip exif pcntl bcmath gd
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -35,7 +36,7 @@ WORKDIR /var/www
 COPY . /var/www
 
 # Install Composer dependencies
-RUN composer install --optimize-autoloader --no-scripts
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Create system user and fix permissions
 RUN useradd -G www-data,root -u $uid -d /home/$user $user
