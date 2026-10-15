@@ -35,6 +35,9 @@ WORKDIR /var/www
 # Copy application code into container
 COPY . /var/www
 
+# Clear any pre-existing cache files from local development
+RUN rm -rf bootstrap/cache/*.php
+
 # Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
