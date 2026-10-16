@@ -53,5 +53,5 @@ EXPOSE 5000
 
 USER $user
 
-# Jalankan server bawaan Laravel pada port 5000
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=5000"]
+# Perbaiki permission folder saat runtime, lalu jalankan server Laravel di port 5000
+CMD ["sh", "-c", "chmod -R 775 storage bootstrap/cache && chown -R craterapp:www-data storage bootstrap/cache && php artisan serve --host=0.0.0.0 --port=5000"]
