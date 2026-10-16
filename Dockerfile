@@ -23,7 +23,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN pecl install imagick \
     && docker-php-ext-enable imagick
 
-# Install PHP extensions (Added pgsql and pdo_pgsql)
+# Install PHP extensions
 RUN docker-php-ext-install pdo_mysql pdo_pgsql pgsql mbstring zip exif pcntl bcmath gd
 
 # Get latest Composer
@@ -35,13 +35,11 @@ WORKDIR /var/www
 # Copy application code into container
 COPY . /var/www
 
-# Clear any pre-existing cache files from local development
+# Clear pre-existing cache files
 RUN rm -rf bootstrap/cache/*.php
 
-# Install Composer dependencies without running scripts
+# Install Composer dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts
-
-# Dump autoload explicitly without scripts to prevent package:discover from running
 RUN composer dump-autoload --no-scripts --optimize
 
 # Create system user and fix permissions
@@ -50,4 +48,10 @@ RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user && \
     chown -R $user:www-data /var/www
 
+# Expose port 5000 untuk Miget
+EXPOSE 5000
+
 USER $user
+
+# Jalankan server bawaan Laravel pada port 5000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=5000"]
