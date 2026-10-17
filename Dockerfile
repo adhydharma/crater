@@ -48,10 +48,16 @@ RUN mkdir -p /home/$user/.composer && \
     chown -R $user:$user /home/$user && \
     chown -R $user:www-data /var/www
 
+# Buat file .env kosong, berikan izin tulis, dan atur folder permission (sebagai root)
+RUN touch /var/www/.env && \
+    chown $user:www-data /var/www/.env && \
+    chmod 666 /var/www/.env && \
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
 # Expose port 5000 untuk Miget
 EXPOSE 5000
 
 USER $user
 
-# Perbaiki permission folder saat runtime, lalu jalankan server Laravel di port 5000
-CMD ["sh", "-c", "chmod -R 775 storage bootstrap/cache && chown -R craterapp:www-data storage bootstrap/cache && php artisan serve --host=0.0.0.0 --port=5000"]
+# Jalankan server Laravel pada port 5000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=5000"]
