@@ -61,4 +61,4 @@ USER $user
 
 # Jalankan server Laravel pada port 5000
 # Jalankan key:generate, migrasi database, lalu jalankan server Laravel
-CMD ["sh", "-c", "php artisan key:generate --force && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=5000"]
+CMD ["sh", "-c", "php artisan key:generate --force && php artisan config:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=5000"]
