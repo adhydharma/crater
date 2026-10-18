@@ -40,9 +40,14 @@ jobs:
 
   frontend:
     docker:
-      - image: cimg/node:18.20
+      - image: cimg/php:8.1
     steps:
       - checkout
+
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
 
       - restore_cache:
           keys:
@@ -50,10 +55,17 @@ jobs:
             - npm-v1-
 
       - run:
-          name: Check Node and npm versions
+          name: Install Node.js 18
           command: |
+            curl -fsSL https://deb.nodesource.com/setup_18.x -o /tmp/nodesource_setup.sh
+            sudo bash /tmp/nodesource_setup.sh
+            sudo apt-get install -y nodejs
             node --version
             npm --version
+
+      - run:
+          name: Install PHP dependencies for Laravel Vite
+          command: composer install --prefer-dist --no-interaction --no-progress
 
       - run:
           name: Install frontend dependencies
@@ -67,6 +79,9 @@ jobs:
       - run:
           name: Build frontend assets
           command: npm run build
+          environment:
+            APP_ENV: production
+            APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 
       - run:
           name: Run frontend tests
