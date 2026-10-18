@@ -76,12 +76,14 @@ jobs:
           paths:
             - ~/.npm
 
+      
       - run:
           name: Build frontend assets
-          command: npm run build
+          command: NODE_OPTIONS="--max-old-space-size=4096" npm run build
           environment:
             APP_ENV: production
             APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+
 
       - run:
           name: Run frontend tests
