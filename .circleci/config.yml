@@ -27,8 +27,8 @@ jobs:
             - vendor
 
       - run:
-          name: Run PHP tests
-          command: vendor/bin/phpunit
+          name: Run PHP tests with Pest
+          command: vendor/bin/pest
           environment:
             APP_ENV: testing
             APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
